@@ -1,4 +1,5 @@
 import sys, os, time
+# from __future__ import print_function
 
 class Node(object):
 	def __init__(self, data):
@@ -23,29 +24,48 @@ class ll(object):
 	def printll(self):
 		temp = self.__head 
 		while temp != None:
-			print("%s"%(temp.data))
+			print("%s"%(temp.data), end= ",")
 			temp = temp.link
 
 	def printRec(self, link):
 		if link == None:
 			return
-		print link.data
+		print(link.data, end=",")
 		self.printRec(link.link)
 	
 	def revPrintRec(self, link):
 		if link == None:
 			return
 		self.revPrintRec(link.link)
-		print link.data
+		print(link.data, end=",")
 
-	def rec(self):
+	def recP(self):
 		self.printRec(self.__head)
 	
-	def recRev(self):
+	def recRevP(self):
 		self.revPrintRec(self.__head)
 
 	def rev(self):
-		prev, cur, nxt = None,
+		if self.__head == None:
+			return
+		prev, cur, nxt = None, self.__head, self.__head.link
+		while cur != None:
+			nxt = cur.link
+			cur.link = prev
+			prev = cur
+			cur = nxt
+		self.__head = prev
+
+	def doRev(self, lnk):
+		if lnk.link == None:
+			self.__head = lnk
+			return
+		self.doRev(lnk.link)
+		lnk.link.link = lnk
+		lnk.link = None
+
+	def revRec(self):
+		self.doRev(self.__head)
 
 def main():
 	myll = ll()
@@ -55,9 +75,18 @@ def main():
 	myll.insertNode(7)
 	# myll.printll()
 	
-	myll.rec()
-	print
-	myll.recRev()
+	# myll.recP()
+	# print
+	# myll.recRevP()
+	print("Normal:")
+	myll.printll()
+	myll.rev()
+	print("\nrev:")
+	myll.printll()
+	print("\nrev rev:")
+	myll.revRec()
+	myll.printll()
+	print("")
 
 if __name__ == "__main__":
 	main()
